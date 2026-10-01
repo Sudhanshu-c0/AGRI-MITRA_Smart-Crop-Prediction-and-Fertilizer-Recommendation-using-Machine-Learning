@@ -1,0 +1,2 @@
+# AGRI-MITRA_Smart-Crop-Prediction-and-Fertilizer-Recommendation-using-Machine-Learning
+AGRI-MITRA is a smart agriculture web application that uses Machine Learning to predict suitable crops and recommend fertilizers. It analyzes soil and environmental parameters, provides crop and fertilizer predictions, stores prediction history, generates reports, and offers user and admin dashboards through a Flask-based system.
