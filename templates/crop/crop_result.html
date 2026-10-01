@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+
+{% block title %}Crop Prediction Result: {{ prediction.predicted_crop.title() }} | AGRI-MITRA{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/crop.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 900px;">
+
+  <!-- Result Hero Banner -->
+  <div class="result-hero">
+    <span class="result-badge">Random Forest Production Model Inference</span>
+    <h2 style="font-size: 1.2rem; color: #a7f3d0; margin-bottom: 6px;">RECOMMENDED OPTIMAL CROP</h2>
+    <div class="result-crop-name">{{ prediction.predicted_crop.title() }}</div>
+    <p style="color: rgba(255, 255, 255, 0.85); font-size: 1rem; max-width: 600px; margin: 0 auto 20px;">
+      Soil chemistry and climatic variables exhibit high compatibility with the biological growth requirements of {{ prediction.predicted_crop.title() }}.
+    </p>
+
+    <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+      <a href="{{ url_for('report.download_crop_pdf', id=prediction.id) }}" class="btn btn-secondary" style="background: white; color: var(--primary-800) !important;">
+        📄 Download Certified PDF Report
+      </a>
+      <a href="{{ url_for('report.view_crop_report', id=prediction.id) }}" class="btn btn-outline" style="border-color: white; color: white !important;">
+        👁️ View Web Advisory
+      </a>
+    </div>
+  </div>
+
+  <!-- Fertilizer Suggestion Box -->
+  <div class="card" style="margin-bottom: 24px;">
+    <h3 style="font-size: 1.25rem; color: var(--primary-900); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+      🌾 Baseline Fertilizer Suggestion for {{ prediction.predicted_crop.title() }}
+    </h3>
+    <div class="result-advisory">
+      <p style="color: #065f46; font-size: 1rem; line-height: 1.6; font-weight: 500;">
+        {{ prediction.fertilizer_suggestion or "Apply balanced NPK 100:50:50 kg/ha with organic manure during soil tillage." }}
+      </p>
+    </div>
+    <p style="font-size: 0.88rem; color: var(--text-muted);">
+      <em>Note: This baseline schedule is customized to {{ prediction.predicted_crop.title() }}. For precision deficiency diagnosis, you may also consult our dedicated Fertilizer Recommendation Model.</em>
+    </p>
+  </div>
+
+  <!-- Input Parameters Summary -->
+  <div class="card" style="margin-bottom: 30px;">
+    <div class="card-header">
+      <h3 class="card-title">📊 Evaluated Soil & Environmental Metrics</h3>
+      <span class="badge badge-emerald">Diagnostic Record #CP-{{ "%04d"|format(prediction.id) }}</span>
+    </div>
+
+    <div class="diagnostics-grid">
+      <div class="diagnostic-item">
+        <span>Nitrogen (N)</span>
+        <strong>{{ prediction.N }} kg/ha</strong>
+      </div>
+      <div class="diagnostic-item">
+        <span>Phosphorus (P)</span>
+        <strong>{{ prediction.P }} kg/ha</strong>
+      </div>
+      <div class="diagnostic-item">
+        <span>Potassium (K)</span>
+        <strong>{{ prediction.K }} kg/ha</strong>
+      </div>
+      <div class="diagnostic-item">
+        <span>Temperature</span>
+        <strong>{{ prediction.temperature }} °C</strong>
+      </div>
+      <div class="diagnostic-item">
+        <span>Humidity</span>
+        <strong>{{ prediction.humidity }} %</strong>
+      </div>
+      <div class="diagnostic-item">
+        <span>Soil pH</span>
+        <strong>{{ prediction.ph }}</strong>
+      </div>
+      <div class="diagnostic-item">
+        <span>Rainfall</span>
+        <strong>{{ prediction.rainfall }} mm</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- Action Footer -->
+  <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+    <a href="{{ url_for('crop.predict') }}" class="btn btn-secondary">&larr; Predict Another Crop</a>
+    <a href="{{ url_for('fertilizer.recommend') }}" class="btn btn-primary">Check Fertilizer Recommendation &rarr;</a>
+  </div>
+
+</div>
+{% endblock %}

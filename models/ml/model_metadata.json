@@ -1,0 +1,136 @@
+{
+  "project": "AGRI-MITRA",
+  "version": "1.0.0",
+  "generated_from_supplied_models": true,
+  "crop_model": {
+    "model_file": "Crop_Prediction_RF.pkl",
+    "model_type": "RandomForestClassifier",
+    "features": [
+      "N",
+      "P",
+      "K",
+      "temperature",
+      "humidity",
+      "ph",
+      "rainfall"
+    ],
+    "feature_order": [
+      "N",
+      "P",
+      "K",
+      "temperature",
+      "humidity",
+      "ph",
+      "rainfall"
+    ],
+    "target": "label",
+    "classes": [
+      "apple",
+      "banana",
+      "blackgram",
+      "chickpea",
+      "coconut",
+      "coffee",
+      "cotton",
+      "grapes",
+      "jute",
+      "kidneybeans",
+      "lentil",
+      "maize",
+      "mango",
+      "mothbeans",
+      "mungbean",
+      "muskmelon",
+      "orange",
+      "papaya",
+      "pigeonpeas",
+      "pomegranate",
+      "rice",
+      "watermelon"
+    ],
+    "encoder_file": "crop_encoder.pkl",
+    "dataset": "crop_dataset.csv",
+    "preprocessing": {
+      "normalization": "whitespace_trimmed",
+      "imputation": "median_by_target",
+      "feature_order": ["N", "P", "K", "temperature", "humidity", "ph", "rainfall"],
+      "output_format": "human_readable_string"
+    },
+    "metrics": {
+      "accuracy": 0.9991,
+      "precision_weighted": 0.9991,
+      "recall_weighted": 0.9991,
+      "f1_weighted": 0.9991
+    },
+    "created_by": "AGRI-MITRA"
+  },
+  "fertilizer_model": {
+    "model_file": "Fertilizer_Recommendation_RF.pkl",
+    "model_type": "RandomForestClassifier",
+    "features": [
+      "temperature",
+      "humidity",
+      "Moisture",
+      "N",
+      "K",
+      "P"
+    ],
+    "feature_order": [
+      "temperature",
+      "humidity",
+      "Moisture",
+      "N",
+      "K",
+      "K"
+    ],
+    "target": "Fertilizer Name",
+    "classes": [
+      "10/26/2026",
+      "14-35-14",
+      "17-17-17",
+      "20-20",
+      "28-28",
+      "DAP",
+      "Urea"
+    ],
+    "encoder_file": "fertilizer_encoder.pkl",
+    "dataset": "fertilizer_dataset.csv",
+    "preprocessing": {
+      "normalization": "whitespace_trimmed_column_cleaned",
+      "imputation": "median_by_target",
+      "model_input_layout": ["temperature", "humidity", "Moisture", "N", "K", "K"],
+      "stored_features": ["temperature", "humidity", "Moisture", "Soil Type", "Crop Type", "N", "K", "P"],
+      "output_format": "human_readable_string"
+    },
+    "metrics": {
+      "accuracy": 0.9899,
+      "precision_weighted": 0.9904,
+      "recall_weighted": 0.9899,
+      "f1_weighted": 0.9898
+    },
+    "created_by": "AGRI-MITRA"
+  },
+  "crop": {
+    "model_file": "Crop_Prediction_RF.pkl",
+    "encoder_file": "crop_encoder.pkl",
+    "features": ["N", "P", "K", "temperature", "humidity", "ph", "rainfall"],
+    "classes": [
+      "apple", "banana", "blackgram", "chickpea", "coconut", "coffee", "cotton",
+      "grapes", "jute", "kidneybeans", "lentil", "maize", "mango", "mothbeans",
+      "mungbean", "muskmelon", "orange", "papaya", "pigeonpeas", "pomegranate",
+      "rice", "watermelon"
+    ],
+    "model_type": "RandomForestClassifier",
+    "model_n_features": 7
+  },
+  "fertilizer": {
+    "model_file": "Fertilizer_Recommendation_RF.pkl",
+    "encoder_file": "fertilizer_encoder.pkl",
+    "features": ["temperature", "humidity", "Moisture", "N", "K", "P"],
+    "classes": [
+      "10/26/2026", "14-35-14", "17-17-17", "20-20", "28-28", "DAP", "Urea"
+    ],
+    "model_type": "RandomForestClassifier",
+    "model_n_features": 6
+  }
+}

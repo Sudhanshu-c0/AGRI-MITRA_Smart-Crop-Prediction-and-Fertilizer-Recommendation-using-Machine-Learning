@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}403 - Forbidden Access | AGRI-MITRA{% endblock %}
+
+{% block content %}
+<div class="container" style="text-align: center; padding: 80px 20px;">
+  <div style="font-size: 4rem; margin-bottom: 10px;">🔒</div>
+  <h1 style="font-size: 2.5rem; color: #b91c1c; margin-bottom: 12px;">403 - Access Denied</h1>
+  <p style="color: var(--text-muted); font-size: 1.1rem; max-width: 500px; margin: 0 auto 30px;">
+    You do not have the required administrative clearance to access this system resource.
+  </p>
+  <div style="display: flex; gap: 12px; justify-content: center;">
+    <a href="{{ url_for('home.index') }}" class="btn btn-secondary">Go to Homepage</a>
+    <a href="{{ url_for('admin.login') }}" class="btn btn-primary" style="background: #b91c1c;">Admin Login</a>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}Administrator Sign In | AGRI-MITRA{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="auth-wrapper" style="max-width: 440px;">
+    <div class="auth-card" style="border-top: 4px solid #b91c1c;">
+      <div class="auth-header">
+        <div style="font-size: 2.2rem; margin-bottom: 8px;">🛡️</div>
+        <h2>Admin Console</h2>
+        <p>Security perimeter authentication for AGRI-MITRA Operations</p>
+      </div>
+
+      <form method="POST" action="{{ url_for('admin.login') }}">
+        <div class="form-group">
+          <label class="form-label" for="email">Administrator Email</label>
+          <input type="email" class="form-control" id="email" name="email" placeholder="admin@agrimitra.com" required autofocus>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="password">Security Password</label>
+          <input type="password" class="form-control" id="password" name="password" placeholder="••••••••" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width: 100%; padding: 12px; background: linear-gradient(135deg, #991b1b, #b91c1c);">
+          Authenticate as Administrator
+        </button>
+      </form>
+
+      <div class="auth-footer" style="margin-top: 20px;">
+        <a href="{{ url_for('auth.login') }}" style="font-size: 0.88rem;">&larr; Return to Regular User Login</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

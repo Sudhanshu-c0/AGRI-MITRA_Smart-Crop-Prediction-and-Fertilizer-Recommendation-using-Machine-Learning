@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+
+{% block title %}User Predictions: {{ target_user.full_name }} | AGRI-MITRA Admin{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 12px;">
+    <div>
+      <h1 style="font-size: 2rem;">👤 {{ target_user.full_name }} &mdash; Activity History</h1>
+      <p style="color: var(--text-muted);">Email: {{ target_user.email }} &bull; Phone: {{ target_user.phone or 'N/A' }} &bull; Location: {{ target_user.location or 'N/A' }}</p>
+    </div>
+    <div style="display: flex; gap: 10px;">
+      <a href="{{ url_for('admin.users') }}" class="btn btn-secondary btn-sm">&larr; Back to Users</a>
+      <a href="{{ url_for('admin.dashboard') }}" class="btn btn-secondary btn-sm">Dashboard</a>
+    </div>
+  </div>
+
+  <!-- User's Crop Predictions -->
+  <div class="card" style="margin-bottom: 30px;">
+    <div class="card-header">
+      <h3 class="card-title">🌾 Crop Predictions ({{ crop_predictions|length }})</h3>
+    </div>
+    {% if crop_predictions %}
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Predicted Crop</th>
+              <th>NPK Values</th>
+              <th>Climate (Temp/Rain)</th>
+              <th>pH</th>
+              <th>Date</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for c in crop_predictions %}
+              <tr>
+                <td>#CP-{{ "%04d"|format(c.id) }}</td>
+                <td style="font-weight: 700; color: var(--primary-800);">{{ c.predicted_crop.title() }}</td>
+                <td>N:{{ c.N }} P:{{ c.P }} K:{{ c.K }}</td>
+                <td>{{ c.temperature }}°C | {{ c.rainfall }}mm</td>
+                <td>{{ c.ph }}</td>
+                <td style="font-size: 0.82rem;">{{ c.created_at.strftime('%Y-%m-%d %H:%M') if c.created_at else '' }}</td>
+                <td>
+                  <a href="{{ url_for('crop.result', id=c.id) }}" class="btn btn-secondary btn-sm">View</a>
+                  <a href="{{ url_for('report.download_crop_pdf', id=c.id) }}" class="btn btn-outline btn-sm">PDF</a>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <p style="color: var(--text-muted); padding: 15px; text-align: center;">No crop predictions submitted by this farmer.</p>
+    {% endif %}
+  </div>
+
+  <!-- User's Fertilizer Recommendations -->
+  <div class="card">
+    <div class="card-header">
+      <h3 class="card-title">🧪 Fertilizer Recommendations ({{ fertilizer_predictions|length }})</h3>
+    </div>
+    {% if fertilizer_predictions %}
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Recommended Fertilizer</th>
+              <th>Soil / Crop</th>
+              <th>Moisture & Temp</th>
+              <th>Date</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for f in fertilizer_predictions %}
+              <tr>
+                <td>#FR-{{ "%04d"|format(f.id) }}</td>
+                <td style="font-weight: 700; color: #0284c7;">{{ f.recommended_fertilizer }}</td>
+                <td>{{ f.soil_type or 'Loam' }} / {{ f.crop_type or 'General' }}</td>
+                <td>{{ f.moisture }}% | {{ f.temperature }}°C</td>
+                <td style="font-size: 0.82rem;">{{ f.created_at.strftime('%Y-%m-%d %H:%M') if f.created_at else '' }}</td>
+                <td>
+                  <a href="{{ url_for('fertilizer.result', id=f.id) }}" class="btn btn-secondary btn-sm">View</a>
+                  <a href="{{ url_for('report.download_fertilizer_pdf', id=f.id) }}" class="btn btn-outline btn-sm">PDF</a>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <p style="color: var(--text-muted); padding: 15px; text-align: center;">No fertilizer recommendations submitted by this farmer.</p>
+    {% endif %}
+  </div>
+
+</div>
+{% endblock %}

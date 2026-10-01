@@ -1,0 +1,1 @@
+Migration placeholder. The current build uses SQLAlchemy create_all for a lightweight SQLite deployment.

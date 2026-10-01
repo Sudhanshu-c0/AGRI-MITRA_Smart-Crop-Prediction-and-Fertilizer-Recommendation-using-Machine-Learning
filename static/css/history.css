@@ -1,0 +1,47 @@
+/* History Styles */
+.history-filters {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.filter-btn-group {
+  display: flex;
+  background: white;
+  padding: 4px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+  gap: 4px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  text-decoration: none;
+}
+
+.filter-btn.active, .filter-btn:hover {
+  background: var(--primary-100);
+  color: var(--primary-800);
+}
+
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text-muted);
+}
+
+.empty-state-icon {
+  font-size: 3rem;
+  margin-bottom: 12px;
+  color: var(--primary-400);
+}

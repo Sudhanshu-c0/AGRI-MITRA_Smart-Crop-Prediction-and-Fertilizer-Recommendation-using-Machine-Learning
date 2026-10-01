@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+
+{% block title %}Crop Suitability Predictor | AGRI-MITRA{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/crop.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="form-shell">
+
+    <div style="text-align: center; margin-bottom: 30px;">
+      <div style="display: inline-block; background: var(--primary-100); color: var(--primary-800); padding: 4px 14px; border-radius: var(--radius-full); font-size: 0.8rem; font-weight: 700; margin-bottom: 10px;">
+        ML RANDOM FOREST CLASSIFIER (99.9% ACCURACY)
+      </div>
+      <h1 style="font-size: 2.3rem; margin-bottom: 8px;">Soil & Environmental Crop Predictor</h1>
+      <p style="color: var(--text-muted); max-width: 580px; margin: 0 auto;">
+        Enter your soil mineral concentrations and climatic measurements to determine the most viable and productive crop cultivar.
+      </p>
+    </div>
+
+    <div class="card">
+      <form method="POST" action="{{ url_for('crop.predict') }}" id="cropPredictionForm">
+        
+        <h3 style="font-size: 1.15rem; color: var(--primary-800); margin-bottom: 16px; border-bottom: 1px solid #f3f4f6; padding-bottom: 8px;">
+          1. Soil Mineral Content (NPK Ratio)
+        </h3>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="N">Nitrogen (N)</label>
+            <div class="input-icon-wrap">
+              <input type="number" step="any" min="0" max="300" class="form-control" id="N" name="N" value="{{ form_data.N }}" placeholder="0 - 140" required>
+              <span class="input-unit">kg/ha</span>
+            </div>
+            <div class="form-help">Essential for leaf & foliage growth</div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="P">Phosphorus (P)</label>
+            <div class="input-icon-wrap">
+              <input type="number" step="any" min="0" max="300" class="form-control" id="P" name="P" value="{{ form_data.P }}" placeholder="5 - 145" required>
+              <span class="input-unit">kg/ha</span>
+            </div>
+            <div class="form-help">Stimulates root & bloom vigor</div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="K">Potassium (K)</label>
+            <div class="input-icon-wrap">
+              <input type="number" step="any" min="0" max="300" class="form-control" id="K" name="K" value="{{ form_data.K }}" placeholder="5 - 205" required>
+              <span class="input-unit">kg/ha</span>
+            </div>
+            <div class="form-help">Enhances disease resilience & fruit size</div>
+          </div>
+        </div>
+
+        <h3 style="font-size: 1.15rem; color: var(--primary-800); margin: 24px 0 16px; border-bottom: 1px solid #f3f4f6; padding-bottom: 8px;">
+          2. Environmental & Climate Factors
+        </h3>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="temperature">Ambient Temperature</label>
+            <div class="input-icon-wrap">
+              <input type="number" step="any" min="-10" max="60" class="form-control" id="temperature" name="temperature" value="{{ form_data.temperature }}" placeholder="8 - 45" required>
+              <span class="input-unit">°C</span>
+            </div>
+            <div class="form-help">Average regional temperature</div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="humidity">Relative Humidity</label>
+            <div class="input-icon-wrap">
+              <input type="number" step="any" min="0" max="100" class="form-control" id="humidity" name="humidity" value="{{ form_data.humidity }}" placeholder="15 - 100" required>
+              <span class="input-unit">%</span>
+            </div>
+            <div class="form-help">Moisture content in ambient air</div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="ph">Soil Reaction (pH)</label>
+            <div class="input-icon-wrap">
+              <input type="number" step="any" min="0" max="14" class="form-control" id="ph" name="ph" value="{{ form_data.ph }}" placeholder="3.5 - 9.5" required>
+              <span class="input-unit">pH</span>
+            </div>
+            <div class="form-help">Optimal agricultural range is 6.0 - 7.5</div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="rainfall">Seasonal Rainfall</label>
+            <div class="input-icon-wrap">
+              <input type="number" step="any" min="0" max="1000" class="form-control" id="rainfall" name="rainfall" value="{{ form_data.rainfall }}" placeholder="20 - 300" required>
+              <span class="input-unit">mm</span>
+            </div>
+            <div class="form-help">Expected cumulative precipitation</div>
+          </div>
+        </div>
+
+        <div style="margin-top: 28px; text-align: center;">
+          <button type="submit" class="btn btn-primary btn-lg" style="width: 100%; max-width: 400px;">
+            🌱 Run Crop Prediction Analysis
+          </button>
+        </div>
+
+      </form>
+    </div>
+
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/crop.js') }}"></script>
+{% endblock %}

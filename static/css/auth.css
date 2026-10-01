@@ -1,0 +1,56 @@
+/* Authentication Component Styles */
+.auth-wrapper {
+  max-width: 480px;
+  margin: 30px auto;
+}
+
+.auth-card {
+  background: white;
+  border-radius: var(--radius-lg);
+  padding: 36px;
+  border: 1px solid var(--border-emerald);
+  box-shadow: var(--shadow-lg);
+}
+
+.auth-header {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.auth-header h2 {
+  font-size: 1.8rem;
+  color: var(--primary-900);
+  margin-bottom: 6px;
+}
+
+.auth-header p {
+  color: var(--text-muted);
+  font-size: 0.92rem;
+}
+
+.auth-divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 20px 0;
+  color: var(--text-light);
+  font-size: 0.8rem;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.auth-divider span {
+  padding: 0 10px;
+}
+
+.auth-footer {
+  text-align: center;
+  margin-top: 24px;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}

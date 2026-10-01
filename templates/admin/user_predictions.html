@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+
+{% block title %}All User Predictions | AGRI-MITRA Admin{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 12px;">
+    <div>
+      <h1 style="font-size: 2rem;">📋 Platform Predictions Inspection</h1>
+      <p style="color: var(--text-muted);">Audit log of all machine learning predictions run by registered farmers.</p>
+    </div>
+    <div style="display: flex; gap: 10px;">
+      <a href="{{ url_for('export.export_admin_all_predictions_csv') }}" class="btn btn-secondary btn-sm">📥 Export All CSV</a>
+      <a href="{{ url_for('admin.dashboard') }}" class="btn btn-secondary btn-sm">&larr; Dashboard</a>
+    </div>
+  </div>
+
+  <!-- Search & Filter Controls -->
+  <form method="GET" action="{{ url_for('admin.predictions') }}" class="admin-search-bar" style="flex-wrap: wrap;">
+    <input type="text" name="q" value="{{ query or '' }}" class="form-control admin-search-input" placeholder="Search by farmer name, email, or crop/fertilizer...">
+    <select name="type" class="form-control" style="max-width: 180px;">
+      <option value="all" {% if filter_type == 'all' %}selected{% endif %}>All Categories</option>
+      <option value="crop" {% if filter_type == 'crop' %}selected{% endif %}>Crops Only</option>
+      <option value="fertilizer" {% if filter_type == 'fertilizer' %}selected{% endif %}>Fertilizers Only</option>
+    </select>
+    <button type="submit" class="btn btn-primary btn-sm">Search Filter</button>
+    {% if query or filter_type != 'all' %}
+      <a href="{{ url_for('admin.predictions') }}" class="btn btn-secondary btn-sm">Clear</a>
+    {% endif %}
+  </form>
+
+  <div class="card">
+    {% if predictions %}
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Category</th>
+              <th>Farmer Name</th>
+              <th>Farmer Email</th>
+              <th>ML Result</th>
+              <th>Input Diagnostics</th>
+              <th>Timestamp</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for p in predictions %}
+              <tr>
+                <td>
+                  {% if p.category == 'crop' %}
+                    <span class="badge badge-emerald">Crop</span>
+                  {% else %}
+                    <span class="badge badge-blue">Fertilizer</span>
+                  {% endif %}
+                </td>
+                <td style="font-weight: 600;">
+                  <a href="{{ url_for('admin.user_detail', user_id=p.user_id) }}">
+                    {{ p.user_name }}
+                  </a>
+                </td>
+                <td style="font-size: 0.85rem; color: var(--text-muted);">
+                  {{ p.user_email }}
+                </td>
+                <td style="font-weight: 700; color: var(--primary-900);">
+                  {{ p.result }}
+                </td>
+                <td style="font-size: 0.82rem; color: var(--text-muted);">
+                  {{ p.details }}
+                </td>
+                <td style="font-size: 0.82rem; color: var(--text-light); white-space: nowrap;">
+                  {{ p.created_at_str }}
+                </td>
+                <td>
+                  {% if p.category == 'crop' %}
+                    <a href="{{ url_for('crop.result', id=p.id) }}" class="btn btn-secondary btn-sm">Inspect</a>
+                  {% else %}
+                    <a href="{{ url_for('fertilizer.result', id=p.id) }}" class="btn btn-secondary btn-sm">Inspect</a>
+                  {% endif %}
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <div class="empty-state">
+        <h4>No prediction records match your query</h4>
+      </div>
+    {% endif %}
+  </div>
+
+</div>
+{% endblock %}

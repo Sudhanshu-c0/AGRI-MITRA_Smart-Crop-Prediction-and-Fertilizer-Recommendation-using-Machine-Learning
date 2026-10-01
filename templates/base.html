@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}AGRI-MITRA | Precision Agriculture & Soil Intelligence{% endblock %}</title>
+  <meta name="description" content="AI-powered precision agriculture platform providing real-time crop prediction and scientific fertilizer recommendations.">
+  
+  <!-- CSS Stylesheets -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive.css') }}">
+  {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar" id="mainNavbar">
+    <div class="container nav-container">
+      <a href="{{ url_for('home.index') }}" class="nav-brand">
+        <div class="brand-icon">🌱</div>
+        <span>AGRI-MITRA</span>
+        <span class="brand-badge">AI 2.0</span>
+      </a>
+
+      <button class="mobile-toggle" aria-label="Toggle navigation">☰</button>
+
+      <ul class="nav-menu">
+        <li class="nav-item"><a href="{{ url_for('home.index') }}">Home</a></li>
+        {% if is_authenticated %}
+          <li class="nav-item"><a href="{{ url_for('dashboard.index') }}">Dashboard</a></li>
+          <li class="nav-item"><a href="{{ url_for('crop.predict') }}">Crop Prediction</a></li>
+          <li class="nav-item"><a href="{{ url_for('fertilizer.recommend') }}">Fertilizer Rec</a></li>
+          <li class="nav-item"><a href="{{ url_for('history.index') }}">History</a></li>
+          {% if is_admin %}
+            <li class="nav-item"><a href="{{ url_for('admin.dashboard') }}" style="color: #b91c1c; font-weight:700;">⚙️ Admin</a></li>
+          {% endif %}
+        {% endif %}
+      </ul>
+
+      <div class="nav-actions">
+        {% if is_authenticated %}
+          <a href="{{ url_for('profile.index') }}" class="btn btn-secondary btn-sm">👤 {{ current_user.full_name.split()[0] if current_user else 'Profile' }}</a>
+          <a href="{{ url_for('auth.logout') }}" class="btn btn-outline btn-sm">Logout</a>
+        {% else %}
+          <a href="{{ url_for('auth.login') }}" class="btn btn-secondary btn-sm">Sign In</a>
+          <a href="{{ url_for('auth.signup') }}" class="btn btn-primary btn-sm">Get Started</a>
+        {% endif %}
+      </div>
+    </div>
+  </nav>
+
+  <!-- Flash Messages -->
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div class="flash-container">
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category if category != 'error' else 'danger' }}">
+            <span>{{ message }}</span>
+            <button type="button" class="alert-close" onclick="this.parentElement.remove();">&times;</button>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  <!-- Main Content -->
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-brand">
+          <h4>🌱 AGRI-MITRA</h4>
+          <p>Next-generation precision agriculture platform. Empowering sustainable farming with trained Machine Learning intelligence, crop soil suitability diagnostics, and tailored fertilizer formulations.</p>
+        </div>
+        <div class="footer-links">
+          <h5>Core Intelligence</h5>
+          <ul>
+            <li><a href="{{ url_for('crop.predict') }}">Crop Predictor ML</a></li>
+            <li><a href="{{ url_for('fertilizer.recommend') }}">Fertilizer Advisor ML</a></li>
+            <li><a href="{{ url_for('history.index') }}">Prediction Archives</a></li>
+            <li><a href="{{ url_for('admin.login') }}">Admin Console</a></li>
+          </ul>
+        </div>
+        <div class="footer-links">
+          <h5>Platform & Standards</h5>
+          <ul>
+            <li><a href="#">Soil Health Protocol</a></li>
+            <li><a href="#">NPK Diagnostic Norms</a></li>
+            <li><a href="#">Data Privacy & Policy</a></li>
+            <li><a href="{{ url_for('health') }}">System Status</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 AGRI-MITRA Precision Agriculture. All rights reserved. Powered by Google Antigravity & Scikit-Learn.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+  {% block extra_js %}{% endblock %}
+</body>
+</html>

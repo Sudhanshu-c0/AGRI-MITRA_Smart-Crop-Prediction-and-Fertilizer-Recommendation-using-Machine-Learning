@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+
+{% block title %}Farmer Directory & Contacts | AGRI-MITRA Admin{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 12px;">
+    <div>
+      <h1 style="font-size: 2rem;">👥 Farmer Directory & Contact Details</h1>
+      <p style="color: var(--text-muted);">Inspect registered farmer profiles, regional location, contact numbers, and prediction volumes.</p>
+    </div>
+    <div style="display: flex; gap: 10px;">
+      <a href="{{ url_for('export.export_admin_users_csv') }}" class="btn btn-secondary btn-sm">📥 Export Users (CSV)</a>
+      <a href="{{ url_for('admin.dashboard') }}" class="btn btn-secondary btn-sm">&larr; Dashboard</a>
+    </div>
+  </div>
+
+  <!-- Search Filter -->
+  <form method="GET" action="{{ url_for('admin.users') }}" class="admin-search-bar">
+    <input type="text" name="q" value="{{ query or '' }}" class="form-control admin-search-input" placeholder="Search by name, email, phone, location...">
+    <button type="submit" class="btn btn-primary btn-sm">Search Farmers</button>
+    {% if query %}
+      <a href="{{ url_for('admin.users') }}" class="btn btn-secondary btn-sm">Clear</a>
+    {% endif %}
+  </form>
+
+  <div class="card">
+    {% if users %}
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Full Name</th>
+              <th>Email</th>
+              <th>Phone Number</th>
+              <th>Location</th>
+              <th>Role</th>
+              <th>Total Runs</th>
+              <th>Joined Date</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for u in users %}
+              <tr>
+                <td style="font-weight: 600;">#{{ u.id }}</td>
+                <td style="font-weight: 700; color: var(--primary-900);">
+                  {{ u.full_name }}
+                </td>
+                <td style="font-size: 0.88rem; color: var(--text-muted);">
+                  {{ u.email }}
+                </td>
+                <td style="font-size: 0.88rem;">
+                  {{ u.phone }}
+                </td>
+                <td style="font-size: 0.88rem;">
+                  {{ u.location }}
+                </td>
+                <td>
+                  <span class="badge {{ 'badge-gold' if u.role == 'admin' else 'badge-emerald' }}">
+                    {{ u.role|upper }}
+                  </span>
+                </td>
+                <td>
+                  <strong>{{ u.total_predictions }}</strong> ({{ u.crop_count }} C / {{ u.fertilizer_count }} F)
+                </td>
+                <td style="font-size: 0.82rem; color: var(--text-light); white-space: nowrap;">
+                  {{ u.joined_at }}
+                </td>
+                <td>
+                  <a href="{{ url_for('admin.user_detail', user_id=u.id) }}" class="btn btn-secondary btn-sm">View Records</a>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <div class="empty-state">
+        <h4>No user profiles match your search</h4>
+      </div>
+    {% endif %}
+  </div>
+
+</div>
+{% endblock %}

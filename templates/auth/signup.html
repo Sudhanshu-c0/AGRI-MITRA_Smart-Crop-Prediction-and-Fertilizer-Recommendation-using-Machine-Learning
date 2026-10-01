@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block title %}Create Account | AGRI-MITRA{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="auth-wrapper" style="max-width: 540px;">
+    <div class="auth-card">
+      <div class="auth-header">
+        <div style="font-size: 2.2rem; margin-bottom: 8px;">🌾</div>
+        <h2>Create Farmer Account</h2>
+        <p>Join the AI-driven precision agricultural network</p>
+      </div>
+
+      <form method="POST" action="{{ url_for('auth.signup') }}">
+        <div class="form-group">
+          <label class="form-label" for="full_name">Full Name</label>
+          <input type="text" class="form-control" id="full_name" name="full_name" value="{{ full_name or '' }}" placeholder="e.g. Ramesh Patel" required autofocus>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="email">Email Address</label>
+          <input type="email" class="form-control" id="email" name="email" value="{{ email or '' }}" placeholder="ramesh@example.com" required>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="phone">Phone Number</label>
+            <input type="tel" class="form-control" id="phone" name="phone" value="{{ phone or '' }}" placeholder="+91 9876543210">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="location">Farming District / State</label>
+            <input type="text" class="form-control" id="location" name="location" value="{{ location or '' }}" placeholder="e.g. Nashik, Maharashtra">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="password">Password</label>
+            <input type="password" class="form-control" id="password" name="password" placeholder="At least 6 characters" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="confirm_password">Confirm Password</label>
+            <input type="password" class="form-control" id="confirm_password" name="confirm_password" placeholder="Repeat password" required>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width: 100%; padding: 12px; margin-top: 10px;">Register Account</button>
+      </form>
+
+      <div class="auth-footer">
+        <p>Already registered? <a href="{{ url_for('auth.login') }}" style="font-weight: 700;">Sign In</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

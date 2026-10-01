@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+
+{% block title %}Certified Crop Advisory Report #CP-{{ "%04d"|format(prediction.id) }} | AGRI-MITRA{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/report.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  
+  <div style="display: flex; justify-content: space-between; align-items: center; max-width: 800px; margin: 0 auto 16px;">
+    <a href="{{ url_for('crop.result', id=prediction.id) }}" class="btn btn-secondary btn-sm">&larr; Back to Result</a>
+    <div style="display: flex; gap: 8px;">
+      <button onclick="window.print()" class="btn btn-secondary btn-sm">🖨️ Print Report</button>
+      <a href="{{ url_for('report.download_crop_pdf', id=prediction.id) }}" class="btn btn-primary btn-sm">📥 Download Official PDF</a>
+    </div>
+  </div>
+
+  <div class="report-paper">
+    <div class="report-header">
+      <div style="font-size: 0.85rem; font-weight: 700; color: var(--primary-600); letter-spacing: 1px; text-transform: uppercase;">
+        AGRI-MITRA SMART AGRICULTURE PROTOCOL
+      </div>
+      <h1 class="report-title">Crop Recommendation Advisory Certificate</h1>
+      <p style="color: var(--text-muted); font-size: 0.88rem;">Official diagnostic summary generated via Random Forest Machine Learning Core.</p>
+    </div>
+
+    <!-- Metadata Grid -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; background: #f8fafc; padding: 18px; border-radius: var(--radius-md); margin-bottom: 24px;">
+      <div>
+        <span style="font-size: 0.78rem; color: var(--text-muted);">REPORT ID:</span>
+        <strong style="display: block;">CP-{{ "%06d"|format(prediction.id) }}</strong>
+      </div>
+      <div>
+        <span style="font-size: 0.78rem; color: var(--text-muted);">DATE & TIME:</span>
+        <strong style="display: block;">{{ prediction.created_at.strftime('%B %d, %Y - %I:%M %p') if prediction.created_at else 'Current' }}</strong>
+      </div>
+      <div>
+        <span style="font-size: 0.78rem; color: var(--text-muted);">FARMER / CLIENT:</span>
+        <strong style="display: block;">{{ prediction.user.full_name if prediction.user else 'Valued Farmer' }}</strong>
+      </div>
+      <div>
+        <span style="font-size: 0.78rem; color: var(--text-muted);">DISTRICT / LOCATION:</span>
+        <strong style="display: block;">{{ prediction.user.location or 'Regional Farming Zone' if prediction.user else 'Regional Farming Zone' }}</strong>
+      </div>
+    </div>
+
+    <!-- Highlight Banner -->
+    <div style="background: #d8f3dc; border: 2px solid var(--primary-500); border-radius: var(--radius-md); padding: 20px; text-align: center; margin-bottom: 24px;">
+      <span style="font-size: 0.8rem; font-weight: 700; color: var(--primary-800); text-transform: uppercase;">PRESCRIBED CULTIVAR</span>
+      <h2 style="font-size: 2.4rem; color: var(--primary-900); margin: 6px 0;">{{ prediction.predicted_crop.title() }}</h2>
+      <p style="font-size: 0.9rem; color: #065f46;">Optimal biological yield expected under measured environmental conditions.</p>
+    </div>
+
+    <!-- Input Diagnostics Table -->
+    <h3 style="font-size: 1.15rem; margin-bottom: 12px; color: var(--primary-900);">Soil & Climatic Parameters Tested</h3>
+    <div class="table-responsive" style="margin-bottom: 24px;">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Parameter</th>
+            <th>Tested Measurement</th>
+            <th>Standard Reference Agronomic Range</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Nitrogen (N)</strong></td>
+            <td>{{ prediction.N }} kg/ha</td>
+            <td>0 - 140 kg/ha</td>
+          </tr>
+          <tr>
+            <td><strong>Phosphorus (P)</strong></td>
+            <td>{{ prediction.P }} kg/ha</td>
+            <td>5 - 145 kg/ha</td>
+          </tr>
+          <tr>
+            <td><strong>Potassium (K)</strong></td>
+            <td>{{ prediction.K }} kg/ha</td>
+            <td>5 - 205 kg/ha</td>
+          </tr>
+          <tr>
+            <td><strong>Ambient Temperature</strong></td>
+            <td>{{ prediction.temperature }} °C</td>
+            <td>10 - 45 °C</td>
+          </tr>
+          <tr>
+            <td><strong>Atmospheric Humidity</strong></td>
+            <td>{{ prediction.humidity }} %</td>
+            <td>15 - 100 %</td>
+          </tr>
+          <tr>
+            <td><strong>Soil pH Reaction</strong></td>
+            <td>{{ prediction.ph }}</td>
+            <td>3.5 - 9.5 (Neutral: 6.0 - 7.5)</td>
+          </tr>
+          <tr>
+            <td><strong>Seasonal Rainfall</strong></td>
+            <td>{{ prediction.rainfall }} mm</td>
+            <td>20 - 300 mm</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Baseline Fertilizer Advisory -->
+    <h3 style="font-size: 1.15rem; margin-bottom: 10px; color: var(--primary-900);">Baseline Fertilizer Guidance</h3>
+    <div style="background: #f0fdf4; border-left: 4px solid var(--primary-500); padding: 14px 18px; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; margin-bottom: 24px;">
+      <p style="color: #065f46; font-size: 0.95rem; line-height: 1.6;">
+        {{ prediction.fertilizer_suggestion or "Follow standard NPK schedule with split nitrogen top-dressing." }}
+      </p>
+    </div>
+
+    <div style="border-top: 1px solid #e5e7eb; padding-top: 16px; margin-top: 24px; font-size: 0.8rem; color: var(--text-light); text-align: center;">
+      Official Computer-Generated Advisory Report &bull; AGRI-MITRA Autonomous Precision Agriculture System
+    </div>
+  </div>
+
+</div>
+{% endblock %}

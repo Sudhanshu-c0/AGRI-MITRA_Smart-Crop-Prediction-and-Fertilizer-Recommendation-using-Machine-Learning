@@ -1,0 +1,46 @@
+# Environment
+.env
+.venv/
+venv/
+ENV/
+env/
+
+# Python cache & artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+*.pytest_cache/
+.pytest_cache/
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Database & Logs
+instance/*.db
+*.db
+*.sqlite
+*.sqlite3
+logs/*.log
+logs/*.txt
+
+# Generated reports & temporary files
+reports/generated/*
+!reports/generated/.gitkeep
+exports/*
+!exports/.gitkeep
+uploads/temporary/*
+!uploads/temporary/.gitkeep
+
+# IDE configs
+.idea/
+.vscode/
+
+# Candidate models (if not desired)
+models/candidate/*
+models/ml/*candidate*.pkl

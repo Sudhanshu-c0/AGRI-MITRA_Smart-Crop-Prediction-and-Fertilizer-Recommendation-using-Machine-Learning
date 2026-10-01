@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block title %}Top Fertilizers Analytics | AGRI-MITRA Admin{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+    <div>
+      <h1 style="font-size: 2rem;">🧪 Top Recommended Fertilizers (Analytics)</h1>
+      <p style="color: var(--text-muted);">Ranking and distribution of chemical & compound fertilizers prescribed by the model.</p>
+    </div>
+    <a href="{{ url_for('admin.dashboard') }}" class="btn btn-secondary btn-sm">&larr; Back to Dashboard</a>
+  </div>
+
+  <div class="card">
+    {% if top_fertilizers %}
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th>Fertilizer Formulation</th>
+              <th>Total Prescriptions</th>
+              <th>Market Share (%)</th>
+              <th>Distribution Bar</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for f in top_fertilizers %}
+              <tr>
+                <td style="font-weight: 700;">#{{ loop.index }}</td>
+                <td style="font-weight: 700; font-size: 1.05rem; color: #0284c7;">{{ f.fertilizer }}</td>
+                <td><strong>{{ f.count }}</strong> advisories</td>
+                <td><span class="badge badge-blue">{{ f.percentage }}%</span></td>
+                <td style="width: 35%;">
+                  <div class="progress-track" style="height: 8px;">
+                    <div class="progress-fill progress-fill-fert" style="width: {{ f.percentage }}%;"></div>
+                  </div>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <div class="empty-state">
+        <h4>No fertilizer recommendation data available yet</h4>
+      </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

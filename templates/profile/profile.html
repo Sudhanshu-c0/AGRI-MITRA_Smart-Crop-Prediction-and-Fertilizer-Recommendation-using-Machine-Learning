@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+{% block title %}User Profile | AGRI-MITRA{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="profile-grid">
+
+    <!-- Profile Sidebar -->
+    <div class="card profile-card">
+      <div class="profile-avatar">
+        {{ user.full_name[0]|upper }}
+      </div>
+      <h2 class="profile-name">{{ user.full_name }}</h2>
+      <p class="profile-email">{{ user.email }}</p>
+      
+      <span class="badge {{ 'badge-gold' if user.role == 'admin' else 'badge-emerald' }}">
+        {{ user.role|upper }}
+      </span>
+
+      <ul class="profile-menu">
+        <li><a href="{{ url_for('profile.index') }}" class="active">👤 Account Overview</a></li>
+        <li><a href="{{ url_for('profile.edit') }}">✏️ Edit Information</a></li>
+        <li><a href="{{ url_for('profile.change_pwd') }}">🔒 Security & Password</a></li>
+        <li><a href="{{ url_for('history.index') }}">📋 My Predictions</a></li>
+        <li><a href="{{ url_for('auth.logout') }}" style="color: #ef4444;">🚪 Sign Out</a></li>
+      </ul>
+    </div>
+
+    <!-- Profile Details Overview -->
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Farmer Account Information</h3>
+        <a href="{{ url_for('profile.edit') }}" class="btn btn-secondary btn-sm">Edit Profile</a>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 24px;">
+        <div style="background: #f9fafb; padding: 16px; border-radius: var(--radius-md);">
+          <span style="font-size: 0.8rem; color: var(--text-muted); display: block;">Full Name</span>
+          <strong style="font-size: 1.05rem;">{{ user.full_name }}</strong>
+        </div>
+        <div style="background: #f9fafb; padding: 16px; border-radius: var(--radius-md);">
+          <span style="font-size: 0.8rem; color: var(--text-muted); display: block;">Registered Email</span>
+          <strong style="font-size: 1.05rem;">{{ user.email }}</strong>
+        </div>
+        <div style="background: #f9fafb; padding: 16px; border-radius: var(--radius-md);">
+          <span style="font-size: 0.8rem; color: var(--text-muted); display: block;">Phone Number</span>
+          <strong style="font-size: 1.05rem;">{{ user.phone or 'Not configured' }}</strong>
+        </div>
+        <div style="background: #f9fafb; padding: 16px; border-radius: var(--radius-md);">
+          <span style="font-size: 0.8rem; color: var(--text-muted); display: block;">Farm / District Location</span>
+          <strong style="font-size: 1.05rem;">{{ user.location or 'Not configured' }}</strong>
+        </div>
+      </div>
+
+      <h4 style="margin-bottom: 12px; font-size: 1.1rem; color: var(--primary-900);">Account Lifetime Activity</h4>
+      <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+        <div class="card" style="flex: 1; min-width: 180px; padding: 16px; text-align: center;">
+          <div style="font-size: 1.8rem; font-weight: 800; color: var(--primary-700);">{{ user.crop_predictions|length }}</div>
+          <div style="font-size: 0.85rem; color: var(--text-muted);">Crop Predictions</div>
+        </div>
+        <div class="card" style="flex: 1; min-width: 180px; padding: 16px; text-align: center;">
+          <div style="font-size: 1.8rem; font-weight: 800; color: #0284c7;">{{ user.fertilizer_predictions|length }}</div>
+          <div style="font-size: 0.85rem; color: var(--text-muted);">Fertilizer Advisories</div>
+        </div>
+        <div class="card" style="flex: 1; min-width: 180px; padding: 16px; text-align: center;">
+          <div style="font-size: 1.8rem; font-weight: 800; color: var(--accent-gold);">
+            {{ user.created_at.strftime('%b %Y') if user.created_at else 'Active' }}
+          </div>
+          <div style="font-size: 0.85rem; color: var(--text-muted);">Member Since</div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+{% endblock %}

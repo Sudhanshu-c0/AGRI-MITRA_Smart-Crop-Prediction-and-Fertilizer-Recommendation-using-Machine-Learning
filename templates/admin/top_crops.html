@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block title %}Top Crops Analytics | AGRI-MITRA Admin{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+    <div>
+      <h1 style="font-size: 2rem;">🌾 Top Predicted Crops (Analytics)</h1>
+      <p style="color: var(--text-muted);">Ranking and distribution of crops predicted across all farming regions.</p>
+    </div>
+    <a href="{{ url_for('admin.dashboard') }}" class="btn btn-secondary btn-sm">&larr; Back to Dashboard</a>
+  </div>
+
+  <div class="card">
+    {% if top_crops %}
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th>Cultivar / Crop Name</th>
+              <th>Total Invocations</th>
+              <th>Market Share (%)</th>
+              <th>Distribution Bar</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for c in top_crops %}
+              <tr>
+                <td style="font-weight: 700;">#{{ loop.index }}</td>
+                <td style="font-weight: 700; font-size: 1.05rem; color: var(--primary-900);">{{ c.crop }}</td>
+                <td><strong>{{ c.count }}</strong> predictions</td>
+                <td><span class="badge badge-emerald">{{ c.percentage }}%</span></td>
+                <td style="width: 35%;">
+                  <div class="progress-track" style="height: 8px;">
+                    <div class="progress-fill" style="width: {{ c.percentage }}%;"></div>
+                  </div>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <div class="empty-state">
+        <h4>No crop prediction data available yet</h4>
+      </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
