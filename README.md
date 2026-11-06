@@ -185,10 +185,10 @@ Verify configuration variables in `.env`:
 FLASK_APP=app.py
 FLASK_ENV=development
 FLASK_DEBUG=1
-SECRET_KEY=agri-mitra-secure-secret-key-2026
+SECRET_KEY=give ur secret key
 ADMIN_USERNAME=admin
-ADMIN_EMAIL=admin@agrimitra.com
-ADMIN_PASSWORD=ChangeThisAdminPassword!2026
+ADMIN_EMAIL=give ur admin mail
+ADMIN_PASSWORD=Put ur Password 
 PORT=5001
 ```
 
