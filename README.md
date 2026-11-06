@@ -185,10 +185,10 @@ Verify configuration variables in `.env`:
 FLASK_APP=app.py
 FLASK_ENV=development
 FLASK_DEBUG=1
-SECRET_KEY=give ur secret key
+SECRET_KEY=give your secret key
 ADMIN_USERNAME=admin
-ADMIN_EMAIL=give ur admin mail
-ADMIN_PASSWORD=Put ur Password 
+ADMIN_EMAIL=give your admin mail
+ADMIN_PASSWORD=Put your Password 
 PORT=5001
 ```
 
@@ -216,8 +216,8 @@ Access the application at `http://127.0.0.1:5001`.
 
 ### 6. Admin Login Credentials
 - **URL**: `http://127.0.0.1:5001/admin/login`
-- **Email**: `admin@agrimitra.com`
-- **Password**: `ChangeThisAdminPassword!2026`
+- **Email**: `your gmail.com`
+- **Password**: `give your password`
 
 ---
 
