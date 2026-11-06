@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+
+{% block title %}Fertilizer Recommendation: {{ prediction.recommended_fertilizer }} | AGRI-MITRA{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/fertilizer.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 900px;">
+
+  <!-- Hero Recommendation Banner -->
+  <div class="fert-hero">
+    <span class="badge badge-blue" style="background: rgba(255,255,255,0.2); color: white; margin-bottom: 12px; font-size: 0.82rem;">
+      SCIENTIFIC RANDOM FOREST PREDICTION
+    </span>
+    <h2 style="font-size: 1.2rem; color: #bae6fd; margin-bottom: 6px;">RECOMMENDED FERTILIZER FORMULATION</h2>
+    <div class="fert-name">{{ prediction.recommended_fertilizer }}</div>
+    <p style="color: rgba(255, 255, 255, 0.9); font-size: 1rem; max-width: 620px; margin: 0 auto 20px;">
+      Targeted chemical formulation prescribed based on detected macronutrient deficits and optimal soil moisture absorption capacity.
+    </p>
+
+    <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+      <a href="{{ url_for('report.download_fertilizer_pdf', id=prediction.id) }}" class="btn btn-secondary" style="background: white; color: #0284c7 !important;">
+        📄 Download Certified PDF Report
+      </a>
+      <a href="{{ url_for('report.view_fertilizer_report', id=prediction.id) }}" class="btn btn-outline" style="border-color: white; color: white !important;">
+        👁️ View Web Advisory
+      </a>
+    </div>
+  </div>
+
+  <!-- Scientific Rationale (WHY) Card -->
+  <div class="rationale-card">
+    <h4>🔬 Agronomic Justification & Scientific Rationale (WHY)</h4>
+    <p style="color: var(--text-main); font-size: 1rem; line-height: 1.65; margin-bottom: 14px;">
+      {{ prediction.explanation }}
+    </p>
+
+    <div class="tips-box">
+      <strong style="color: #92400e;">💡 Optimal Application Protocol:</strong>
+      <p style="color: #78350f; font-size: 0.9rem; margin-top: 4px;">
+        Apply during active root development periods. Ensure adequate soil moisture to minimize volatilization and facilitate rapid capillary uptake into plant vascular systems.
+      </p>
+    </div>
+  </div>
+
+  <!-- Measured Parameters Grid -->
+  <div class="card" style="margin-bottom: 30px;">
+    <div class="card-header">
+      <h3 class="card-title">🧪 Analyzed Field Diagnostics</h3>
+      <span class="badge badge-blue">Recommendation #FR-{{ "%04d"|format(prediction.id) }}</span>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px;">
+      <div style="background: #f8fafc; border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 12px; text-align: center;">
+        <span style="font-size: 0.75rem; color: var(--text-muted); display: block;">Soil Type</span>
+        <strong style="font-size: 1rem; color: var(--primary-900);">{{ prediction.soil_type or 'Loamy' }}</strong>
+      </div>
+      <div style="background: #f8fafc; border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 12px; text-align: center;">
+        <span style="font-size: 0.75rem; color: var(--text-muted); display: block;">Target Crop</span>
+        <strong style="font-size: 1rem; color: var(--primary-900);">{{ prediction.crop_type or 'General' }}</strong>
+      </div>
+      <div style="background: #f8fafc; border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 12px; text-align: center;">
+        <span style="font-size: 0.75rem; color: var(--text-muted); display: block;">Nitrogen (N)</span>
+        <strong style="font-size: 1rem; color: var(--primary-900);">{{ prediction.N }} kg/ha</strong>
+      </div>
+      <div style="background: #f8fafc; border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 12px; text-align: center;">
+        <span style="font-size: 0.75rem; color: var(--text-muted); display: block;">Phosphorus (P)</span>
+        <strong style="font-size: 1rem; color: var(--primary-900);">{{ prediction.P }} kg/ha</strong>
+      </div>
+      <div style="background: #f8fafc; border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 12px; text-align: center;">
+        <span style="font-size: 0.75rem; color: var(--text-muted); display: block;">Potassium (K)</span>
+        <strong style="font-size: 1rem; color: var(--primary-900);">{{ prediction.K }} kg/ha</strong>
+      </div>
+      <div style="background: #f8fafc; border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 12px; text-align: center;">
+        <span style="font-size: 0.75rem; color: var(--text-muted); display: block;">Soil Moisture</span>
+        <strong style="font-size: 1rem; color: var(--primary-900);">{{ prediction.moisture }} %</strong>
+      </div>
+      <div style="background: #f8fafc; border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 12px; text-align: center;">
+        <span style="font-size: 0.75rem; color: var(--text-muted); display: block;">Temperature</span>
+        <strong style="font-size: 1rem; color: var(--primary-900);">{{ prediction.temperature }} °C</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- Navigation Action Footer -->
+  <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+    <a href="{{ url_for('fertilizer.recommend') }}" class="btn btn-secondary">&larr; New Fertilizer Consultation</a>
+    <a href="{{ url_for('crop.predict') }}" class="btn btn-primary">Run Crop Prediction &rarr;</a>
+  </div>
+
+</div>
+{% endblock %}

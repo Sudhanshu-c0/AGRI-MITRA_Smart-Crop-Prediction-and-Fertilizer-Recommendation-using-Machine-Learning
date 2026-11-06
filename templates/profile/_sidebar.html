@@ -1,0 +1,21 @@
+<aside class="card profile-card">
+  <div class="profile-avatar">
+    {{ user.full_name[0]|upper }}
+  </div>
+  <h2 class="profile-name">{{ user.full_name }}</h2>
+  <p class="profile-email">{{ user.email }}</p>
+
+  <span class="badge {{ 'badge-gold' if user.role == 'admin' else 'badge-emerald' }}">
+    {{ user.role|upper }}
+  </span>
+
+  <nav aria-label="Profile navigation">
+    <ul class="profile-menu">
+      <li><a href="{{ url_for('profile.index') }}" class="{{ 'active' if request.endpoint == 'profile.index' else '' }}" {% if request.endpoint == 'profile.index' %}aria-current="page"{% endif %}>👤 Account Overview</a></li>
+      <li><a href="{{ url_for('profile.edit') }}" class="{{ 'active' if request.endpoint == 'profile.edit' else '' }}" {% if request.endpoint == 'profile.edit' %}aria-current="page"{% endif %}>✏️ Edit Information</a></li>
+      <li><a href="{{ url_for('profile.change_pwd') }}" class="{{ 'active' if request.endpoint == 'profile.change_pwd' else '' }}" {% if request.endpoint == 'profile.change_pwd' %}aria-current="page"{% endif %}>🔒 Security &amp; Password</a></li>
+      <li><a href="{{ url_for('history.index') }}">📋 My Predictions</a></li>
+      <li><a class="profile-signout" href="{{ url_for('auth.logout') }}">🚪 Sign Out</a></li>
+    </ul>
+  </nav>
+</aside>

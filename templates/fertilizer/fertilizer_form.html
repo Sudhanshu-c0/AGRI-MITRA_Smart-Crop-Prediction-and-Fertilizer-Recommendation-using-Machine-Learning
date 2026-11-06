@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+
+{% block title %}Fertilizer Recommendation Advisor | AGRI-MITRA{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/fertilizer.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="form-shell">
+
+    <div style="text-align: center; margin-bottom: 30px;">
+      <div style="display: inline-block; background: #e0f2fe; color: #0284c7; padding: 4px 14px; border-radius: var(--radius-full); font-size: 0.8rem; font-weight: 700; margin-bottom: 10px;">
+        ML RANDOM FOREST CLASSIFIER (98.9% ACCURACY)
+      </div>
+      <h1 style="font-size: 2.3rem; margin-bottom: 8px;">Fertilizer Recommendation Advisor</h1>
+      <p style="color: var(--text-muted); max-width: 580px; margin: 0 auto;">
+        Analyze your field's current moisture, thermal metrics, and mineral deficiencies to receive a precise chemical/organic fertilizer formulation with scientific explanations.
+      </p>
+    </div>
+
+    <div class="card">
+      <form method="POST" action="{{ url_for('fertilizer.recommend') }}" id="fertilizerForm">
+
+        <h3 style="font-size: 1.15rem; color: #0369a1; margin-bottom: 16px; border-bottom: 1px solid #f3f4f6; padding-bottom: 8px;">
+          1. Field Physical & Environmental Conditions
+        </h3>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="temperature">Soil Temperature</label>
+            <div class="input-icon-wrap">
+              <input type="number" step="any" min="0" max="60" class="form-control" id="temperature" name="temperature" value="{{ form_data.temperature }}" placeholder="20 - 40" required>
+              <span class="input-unit">°C</span>
+            </div>
+            <div class="form-help">Current soil temperature</div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="humidity">Atmospheric Humidity</label>
+            <div class="input-icon-wrap">
+              <input type="number" step="any" min="0" max="100" class="form-control" id="humidity" name="humidity" value="{{ form_data.humidity }}" placeholder="40 - 80" required>
+              <span class="input-unit">%</span>
+            </div>
+            <div class="form-help">Ambient humidity percentage</div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="Moisture">Soil Moisture</label>
+            <div class="input-icon-wrap">
+              <input type="number" step="any" min="0" max="100" class="form-control" id="Moisture" name="Moisture" value="{{ form_data.Moisture }}" placeholder="25 - 65" required>
+              <span class="input-unit">%</span>
+            </div>
+            <div class="form-help">Volumetric soil water content</div>
+          </div>
+        </div>
+
+        <h3 style="font-size: 1.15rem; color: #0369a1; margin: 24px 0 16px; border-bottom: 1px solid #f3f4f6; padding-bottom: 8px;">
+          2. Field Agronomic Context
+        </h3>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="soil_type">Soil Classification</label>
+            <select class="form-control" id="soil_type" name="soil_type">
+              {% for st in ['Sandy', 'Loamy', 'Black', 'Red', 'Clayey'] %}
+                <option value="{{ st }}" {% if form_data.soil_type == st %}selected{% endif %}>{{ st }} Soil</option>
+              {% endfor %}
+            </select>
+            <div class="form-help">Physical texture of the topsoil</div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="crop_type">Target Cultivar / Crop</label>
+            <select class="form-control" id="crop_type" name="crop_type">
+              {% for ct in ['Maize', 'Sugarcane', 'Cotton', 'Tobacco', 'Paddy', 'Barley', 'Wheat', 'Millets', 'Oil seeds', 'Pulses', 'Ground Nuts'] %}
+                <option value="{{ ct }}" {% if form_data.crop_type == ct %}selected{% endif %}>{{ ct }}</option>
+              {% endfor %}
+            </select>
+            <div class="form-help">Current or planned planting crop</div>
+          </div>
+        </div>
+
+        <h3 style="font-size: 1.15rem; color: #0369a1; margin: 24px 0 16px; border-bottom: 1px solid #f3f4f6; padding-bottom: 8px;">
+          3. Available Macronutrient Status (NPK)
+        </h3>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="N">Soil Nitrogen (N)</label>
+            <div class="input-icon-wrap">
+              <input type="number" step="any" min="0" max="200" class="form-control" id="N" name="N" value="{{ form_data.N }}" placeholder="4 - 42" required>
+              <span class="input-unit">kg/ha</span>
+            </div>
+            <div class="form-help">Soil available nitrogen level</div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="P">Soil Phosphorus (P)</label>
+            <div class="input-icon-wrap">
+              <input type="number" step="any" min="0" max="200" class="form-control" id="P" name="P" value="{{ form_data.P }}" placeholder="0 - 42" required>
+              <span class="input-unit">kg/ha</span>
+            </div>
+            <div class="form-help">Available soil phosphorus</div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="K">Soil Potassium (K)</label>
+            <div class="input-icon-wrap">
+              <input type="number" step="any" min="0" max="200" class="form-control" id="K" name="K" value="{{ form_data.K }}" placeholder="0 - 19" required>
+              <span class="input-unit">kg/ha</span>
+            </div>
+            <div class="form-help">Available soil potash level</div>
+          </div>
+        </div>
+
+        <div style="margin-top: 28px; text-align: center;">
+          <button type="submit" class="btn btn-primary btn-lg" style="width: 100%; max-width: 400px; background: linear-gradient(135deg, #0369a1, #0284c7);">
+            🧪 Generate Scientific Recommendation
+          </button>
+        </div>
+
+      </form>
+    </div>
+
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/fertilizer.js') }}"></script>
+{% endblock %}

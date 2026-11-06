@@ -1,0 +1,195 @@
+{% extends 'base.html' %}
+
+{% block title %}Administrator Dashboard | AGRI-MITRA{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+
+  <!-- Admin Title Bar -->
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 12px;">
+    <div>
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <h1 style="font-size: 2.1rem;">⚙️ Administrator Operations Dashboard</h1>
+        <span class="badge admin-badge">SECURE CONSOLE</span>
+      </div>
+      <p style="color: var(--text-muted);">Real-time telemetry, model consumption trends, and user analytics.</p>
+    </div>
+    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+      <a href="{{ url_for('export.export_admin_users_csv') }}" class="btn btn-secondary btn-sm">👥 Export Users CSV</a>
+      <a href="{{ url_for('export.export_admin_all_predictions_csv') }}" class="btn btn-secondary btn-sm">📥 Export Predictions CSV</a>
+      <a href="{{ url_for('admin.users') }}" class="btn btn-primary btn-sm">👤 User Contacts</a>
+    </div>
+  </div>
+
+  <!-- Metric Counters Grid -->
+  <div class="dashboard-grid">
+    <div class="stat-card">
+      <div class="stat-icon stat-icon-amber">👥</div>
+      <div class="stat-info">
+        <h3>{{ summary.total_users }}</h3>
+        <p>Registered Farmers</p>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon stat-icon-green">🌾</div>
+      <div class="stat-info">
+        <h3>{{ summary.total_crop_predictions }}</h3>
+        <p>Crop Predictions Run</p>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon stat-icon-sky">🧪</div>
+      <div class="stat-info">
+        <h3>{{ summary.total_fertilizer_recommendations }}</h3>
+        <p>Fertilizer Advisories</p>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon" style="background: #f1f5f9; color: var(--primary-900);">📈</div>
+      <div class="stat-info">
+        <h3>{{ summary.total_predictions }}</h3>
+        <p>Total Consultations</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7-Day Trend Chart Card -->
+  <div class="chart-card">
+    <div class="chart-header">
+      <div>
+        <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--primary-900);">📈 7-Day Activity Trends</h3>
+        <p style="font-size: 0.85rem; color: var(--text-muted);">Daily volume of Crop Predictions (green) vs Fertilizer Recommendations (blue)</p>
+      </div>
+      <div style="display: flex; gap: 16px; font-size: 0.85rem; font-weight: 600;">
+        <span style="color: #2d6a4f;">● Crop Predictions</span>
+        <span style="color: #0284c7;">● Fertilizer Recs</span>
+      </div>
+    </div>
+    <div style="position: relative; width: 100%; height: 280px;">
+      <canvas id="analyticsChart"
+              data-labels='{{ analytics.labels|tojson }}'
+              data-crops='{{ analytics.crop_counts|tojson }}'
+              data-ferts='{{ analytics.fertilizer_counts|tojson }}'>
+      </canvas>
+    </div>
+  </div>
+
+  <!-- Top Models Analytics (Two Columns) -->
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 24px; margin-bottom: 30px;">
+    
+    <!-- Top Crops -->
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">🌾 Top Predicted Crops</h3>
+        <a href="{{ url_for('admin.top_crops') }}" style="font-size: 0.85rem; font-weight: 600;">View Details &rarr;</a>
+      </div>
+      {% if top_crops %}
+        {% for item in top_crops %}
+          <div class="progress-bar-container">
+            <div class="progress-label">
+              <span>{{ item.crop }}</span>
+              <span>{{ item.count }} times ({{ item.percentage }}%)</span>
+            </div>
+            <div class="progress-track">
+              <div class="progress-fill" style="width: {{ item.percentage }}%;"></div>
+            </div>
+          </div>
+        {% endfor %}
+      {% else %}
+        <p style="color: var(--text-muted); font-size: 0.9rem; text-align: center; padding: 20px;">No crop predictions recorded yet.</p>
+      {% endif %}
+    </div>
+
+    <!-- Top Fertilizers -->
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">🧪 Top Recommended Fertilizers</h3>
+        <a href="{{ url_for('admin.top_fertilizers') }}" style="font-size: 0.85rem; font-weight: 600;">View Details &rarr;</a>
+      </div>
+      {% if top_fertilizers %}
+        {% for item in top_fertilizers %}
+          <div class="progress-bar-container">
+            <div class="progress-label">
+              <span>{{ item.fertilizer }}</span>
+              <span>{{ item.count }} times ({{ item.percentage }}%)</span>
+            </div>
+            <div class="progress-track">
+              <div class="progress-fill progress-fill-fert" style="width: {{ item.percentage }}%;"></div>
+            </div>
+          </div>
+        {% endfor %}
+      {% else %}
+        <p style="color: var(--text-muted); font-size: 0.9rem; text-align: center; padding: 20px;">No fertilizer recommendations recorded yet.</p>
+      {% endif %}
+    </div>
+
+  </div>
+
+  <!-- Global Recent Predictions Table -->
+  <div class="card">
+    <div class="card-header">
+      <h3 class="card-title">📋 Global User Predictions</h3>
+      <a href="{{ url_for('admin.predictions') }}" style="font-size: 0.85rem; font-weight: 600;">Explore All &rarr;</a>
+    </div>
+
+    {% if recent_predictions %}
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Type</th>
+              <th>Farmer / User</th>
+              <th>Output Result</th>
+              <th>Diagnostics Summary</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for p in recent_predictions %}
+              <tr>
+                <td>
+                  {% if p.category == 'crop' %}
+                    <span class="badge badge-emerald">Crop</span>
+                  {% else %}
+                    <span class="badge badge-blue">Fertilizer</span>
+                  {% endif %}
+                </td>
+                <td style="font-weight: 600;">
+                  <a href="{{ url_for('admin.user_detail', user_id=p.user_id) }}">
+                    {{ p.user_name }}
+                  </a>
+                  <div style="font-size: 0.78rem; color: var(--text-light);">{{ p.user_email }}</div>
+                </td>
+                <td style="font-weight: 700; color: var(--primary-900);">
+                  {{ p.result }}
+                </td>
+                <td style="font-size: 0.82rem; color: var(--text-muted);">
+                  {{ p.details }}
+                </td>
+                <td style="font-size: 0.82rem; color: var(--text-light); white-space: nowrap;">
+                  {{ p.created_at_str }}
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <div class="empty-state">
+        <div class="empty-state-icon">📊</div>
+        <h4>No prediction activity recorded across the platform yet</h4>
+      </div>
+    {% endif %}
+  </div>
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+{% endblock %}

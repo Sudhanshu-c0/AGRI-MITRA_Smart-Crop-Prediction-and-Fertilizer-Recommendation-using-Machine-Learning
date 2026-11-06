@@ -1,0 +1,42 @@
+/* Fertilizer Recommendation Styles */
+.fert-hero {
+  background: linear-gradient(135deg, #064e3b, #0f172a);
+  color: white;
+  border-radius: var(--radius-lg);
+  padding: 40px;
+  text-align: center;
+  margin-bottom: 30px;
+  box-shadow: var(--shadow-lg);
+}
+
+.fert-name {
+  font-size: 2.8rem;
+  font-weight: 800;
+  color: #38bdf8;
+  letter-spacing: -0.5px;
+  margin: 10px 0;
+}
+
+.rationale-card {
+  background: #f8fafc;
+  border: 1.5px solid #cbd5e1;
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.rationale-card h4 {
+  color: #0f172a;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tips-box {
+  background: #fffbeb;
+  border-left: 4px solid var(--warning);
+  padding: 16px 20px;
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  margin-top: 16px;
+}

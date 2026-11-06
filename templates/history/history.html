@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+
+{% block title %}Prediction Archives & History | AGRI-MITRA{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/history.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 12px;">
+    <div>
+      <h1 style="font-size: 2rem;">Farm Advisory History</h1>
+      <p style="color: var(--text-muted);">Unified chronological log of your agricultural recommendations and crop models.</p>
+    </div>
+    <div style="display: flex; gap: 10px;">
+      <a href="{{ url_for('export.export_user_history_csv') }}" class="btn btn-secondary btn-sm">📥 Export All (CSV)</a>
+      <a href="{{ url_for('export.export_user_crop_csv') }}" class="btn btn-secondary btn-sm">🌾 Crop CSV</a>
+      <a href="{{ url_for('export.export_user_fertilizer_csv') }}" class="btn btn-secondary btn-sm">🧪 Fertilizer CSV</a>
+    </div>
+  </div>
+
+  <!-- Filter tabs -->
+  <div class="history-filters">
+    <div class="filter-btn-group">
+      <a href="{{ url_for('history.index') }}" class="filter-btn active">All Records</a>
+      <a href="{{ url_for('history.crop_history') }}" class="filter-btn">Crop Predictions Only</a>
+      <a href="{{ url_for('history.fertilizer_history') }}" class="filter-btn">Fertilizer Recs Only</a>
+    </div>
+    <input type="text" id="historySearch" class="form-control" placeholder="Search by crop, fertilizer, or date..." style="max-width: 300px; padding: 7px 12px; font-size: 0.85rem;">
+  </div>
+
+  <div class="card">
+    {% if history_items %}
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Advisory Category</th>
+              <th>Predicted Output</th>
+              <th>Advisory / Rationale</th>
+              <th>Date & Time</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in history_items %}
+              <tr>
+                <td>
+                  {% if item.category == 'crop' %}
+                    <span class="badge badge-emerald">🌾 Crop</span>
+                  {% else %}
+                    <span class="badge badge-blue">🧪 Fertilizer</span>
+                  {% endif %}
+                </td>
+                <td style="font-weight: 700; color: var(--primary-900);">
+                  {{ item.result }}
+                </td>
+                <td style="color: var(--text-muted); font-size: 0.85rem; max-width: 400px;">
+                  {{ item.detail }}
+                </td>
+                <td style="color: var(--text-light); font-size: 0.82rem; white-space: nowrap;">
+                  {{ item.created_at_str }}
+                </td>
+                <td style="white-space: nowrap;">
+                  {% if item.category == 'crop' %}
+                    <a href="{{ url_for('crop.result', id=item.id) }}" class="btn btn-secondary btn-sm">View</a>
+                    <a href="{{ url_for('report.download_crop_pdf', id=item.id) }}" class="btn btn-outline btn-sm">PDF</a>
+                    <form method="POST" action="{{ url_for('history.delete_crop', id=item.id) }}" style="display: inline;" onsubmit="return confirm('Delete this record?');">
+                      <button type="submit" class="btn btn-sm" style="color: #ef4444; background: none; border: none; cursor: pointer; padding: 4px;">🗑️</button>
+                    </form>
+                  {% else %}
+                    <a href="{{ url_for('fertilizer.result', id=item.id) }}" class="btn btn-secondary btn-sm">View</a>
+                    <a href="{{ url_for('report.download_fertilizer_pdf', id=item.id) }}" class="btn btn-outline btn-sm">PDF</a>
+                    <form method="POST" action="{{ url_for('history.delete_fertilizer', id=item.id) }}" style="display: inline;" onsubmit="return confirm('Delete this record?');">
+                      <button type="submit" class="btn btn-sm" style="color: #ef4444; background: none; border: none; cursor: pointer; padding: 4px;">🗑️</button>
+                    </form>
+                  {% endif %}
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <div class="empty-state">
+        <div class="empty-state-icon">📋</div>
+        <h4>No prediction records found</h4>
+        <p>Start by running a crop or fertilizer recommendation.</p>
+        <div style="margin-top: 15px; display: flex; gap: 10px; justify-content: center;">
+          <a href="{{ url_for('crop.predict') }}" class="btn btn-primary btn-sm">Predict Crop</a>
+          <a href="{{ url_for('fertilizer.recommend') }}" class="btn btn-secondary btn-sm">Recommend Fertilizer</a>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/history.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block title %}User Profile | AGRI-MITRA{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="profile-grid">
+
+    {% include 'profile/_sidebar.html' %}
+
+    <!-- Profile Details Overview -->
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Farmer Account Information</h3>
+        <a href="{{ url_for('profile.edit') }}" class="btn btn-secondary btn-sm">Edit Profile</a>
+      </div>
+
+      <div class="profile-detail-grid">
+        <div class="profile-detail-item">
+          <span class="profile-detail-label">Full Name</span>
+          <strong class="profile-detail-value">{{ user.full_name }}</strong>
+        </div>
+        <div class="profile-detail-item">
+          <span class="profile-detail-label">Registered Email</span>
+          <strong class="profile-detail-value">{{ user.email }}</strong>
+        </div>
+        <div class="profile-detail-item">
+          <span class="profile-detail-label">Phone Number</span>
+          <strong class="profile-detail-value">{{ user.phone or 'Not configured' }}</strong>
+        </div>
+        <div class="profile-detail-item">
+          <span class="profile-detail-label">Farm / District Location</span>
+          <strong class="profile-detail-value">{{ user.location or 'Not configured' }}</strong>
+        </div>
+      </div>
+
+      <h4 style="margin-bottom: 12px; font-size: 1.1rem; color: var(--primary-900);">Account Lifetime Activity</h4>
+      <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+        <div class="card" style="flex: 1; min-width: 180px; padding: 16px; text-align: center;">
+          <div style="font-size: 1.8rem; font-weight: 800; color: var(--primary-700);">{{ user.crop_predictions|length }}</div>
+          <div style="font-size: 0.85rem; color: var(--text-muted);">Crop Predictions</div>
+        </div>
+        <div class="card" style="flex: 1; min-width: 180px; padding: 16px; text-align: center;">
+          <div style="font-size: 1.8rem; font-weight: 800; color: #0284c7;">{{ user.fertilizer_predictions|length }}</div>
+          <div style="font-size: 0.85rem; color: var(--text-muted);">Fertilizer Advisories</div>
+        </div>
+        <div class="card" style="flex: 1; min-width: 180px; padding: 16px; text-align: center;">
+          <div style="font-size: 1.8rem; font-weight: 800; color: var(--accent-gold);">
+            {{ user.created_at.strftime('%b %Y') if user.created_at else 'Active' }}
+          </div>
+          <div style="font-size: 0.85rem; color: var(--text-muted);">Member Since</div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+{% endblock %}

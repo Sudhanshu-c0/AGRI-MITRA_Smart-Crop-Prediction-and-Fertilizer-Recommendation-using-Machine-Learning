@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+
+{% block title %}Crop Prediction History | AGRI-MITRA{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/history.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 12px;">
+    <div>
+      <h1 style="font-size: 2rem;">🌾 Crop Prediction History</h1>
+      <p style="color: var(--text-muted);">Historical records of evaluated soils and predicted optimal crops.</p>
+    </div>
+    <div style="display: flex; gap: 10px;">
+      <a href="{{ url_for('export.export_user_crop_csv') }}" class="btn btn-secondary btn-sm">📥 Export Crop Records (CSV)</a>
+      <a href="{{ url_for('crop.predict') }}" class="btn btn-primary btn-sm">🌱 New Prediction</a>
+    </div>
+  </div>
+
+  <div class="history-filters">
+    <div class="filter-btn-group">
+      <a href="{{ url_for('history.index') }}" class="filter-btn">All Records</a>
+      <a href="{{ url_for('history.crop_history') }}" class="filter-btn active">Crop Predictions Only</a>
+      <a href="{{ url_for('history.fertilizer_history') }}" class="filter-btn">Fertilizer Recs Only</a>
+    </div>
+  </div>
+
+  <div class="card">
+    {% if crops %}
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Predicted Crop</th>
+              <th>NPK Status</th>
+              <th>Climate (Temp / Rain)</th>
+              <th>Soil pH</th>
+              <th>Date</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for c in crops %}
+              <tr>
+                <td style="font-weight: 600;">#CP-{{ "%04d"|format(c.id) }}</td>
+                <td style="font-weight: 700; color: var(--primary-800);">
+                  {{ c.predicted_crop.title() }}
+                </td>
+                <td style="font-size: 0.85rem;">
+                  N:{{ c.N }} | P:{{ c.P }} | K:{{ c.K }}
+                </td>
+                <td style="font-size: 0.85rem;">
+                  {{ c.temperature }}°C | {{ c.rainfall }}mm
+                </td>
+                <td>{{ c.ph }}</td>
+                <td style="font-size: 0.82rem; color: var(--text-light); white-space: nowrap;">
+                  {{ c.created_at.strftime('%Y-%m-%d %H:%M') if c.created_at else '' }}
+                </td>
+                <td style="white-space: nowrap;">
+                  <a href="{{ url_for('crop.result', id=c.id) }}" class="btn btn-secondary btn-sm">Details</a>
+                  <a href="{{ url_for('report.download_crop_pdf', id=c.id) }}" class="btn btn-outline btn-sm">PDF</a>
+                  <form method="POST" action="{{ url_for('history.delete_crop', id=c.id) }}" style="display: inline;" onsubmit="return confirm('Delete record?');">
+                    <button type="submit" class="btn btn-sm" style="color: #ef4444; background: none; border: none; cursor: pointer; padding: 4px;">🗑️</button>
+                  </form>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <div class="empty-state">
+        <div class="empty-state-icon">🌾</div>
+        <h4>No crop predictions yet</h4>
+        <p>Run your first soil suitability assessment now.</p>
+        <div style="margin-top: 15px;">
+          <a href="{{ url_for('crop.predict') }}" class="btn btn-primary btn-sm">Predict Crop</a>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+
+</div>
+{% endblock %}

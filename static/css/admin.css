@@ -1,0 +1,61 @@
+/* Admin Panel Styles */
+.admin-badge {
+  background: #fef2f2;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
+}
+
+.chart-card {
+  background: white;
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  border: 1px solid var(--border-emerald);
+  margin-bottom: 24px;
+}
+
+.chart-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.progress-bar-container {
+  margin-bottom: 16px;
+}
+
+.progress-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.88rem;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.progress-track {
+  height: 10px;
+  background: #f1f5f9;
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary-600), var(--primary-500));
+  border-radius: var(--radius-full);
+  transition: width 0.6s ease-in-out;
+}
+
+.progress-fill-fert {
+  background: linear-gradient(90deg, #0284c7, #38bdf8);
+}
+
+.admin-search-bar {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.admin-search-input {
+  max-width: 380px;
+}
