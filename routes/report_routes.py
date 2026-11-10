@@ -29,7 +29,7 @@ def download_crop_pdf(id):
         pdf_bytes,
         mimetype='application/pdf',
         headers={
-            'Content-Disposition': f'attachment; filename="{filename}"'
+            'Content-Disposition': f'inline; filename="{filename}"'
         }
     )
 

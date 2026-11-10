@@ -41,7 +41,7 @@ def _get_styles():
         fontName='Helvetica',
         fontSize=10,
         leading=14,
-        textColor=colors.HexColor('#52b788'),
+        textColor=colors.HexColor('#2d6a4f'),
         spaceAfter=15
     )
 

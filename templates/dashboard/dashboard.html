@@ -50,12 +50,11 @@
   <div class="quick-actions">
     <div class="action-banner">
       <div>
-        <span class="badge badge-emerald" style="background: rgba(255,255,255,0.2); color: white; margin-bottom: 12px;">ML Model v1.0</span>
         <h3>Crop Suitability Predictor</h3>
         <p>Input current soil Nitrogen, Phosphorus, Potassium levels alongside ambient rainfall and temperature to determine the optimal harvest cultivar.</p>
       </div>
       <div>
-        <a href="{{ url_for('crop.predict') }}" class="btn btn-secondary" style="background: white; color: var(--primary-800) !important;">
+        <a href="{{ url_for('crop.predict') }}" class="btn btn-primary">
           Start Crop Prediction &rarr;
         </a>
       </div>

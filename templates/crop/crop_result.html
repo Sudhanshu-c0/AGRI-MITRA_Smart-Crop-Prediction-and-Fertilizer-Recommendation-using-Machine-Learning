@@ -19,8 +19,8 @@
     </p>
 
     <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
-      <a href="{{ url_for('report.download_crop_pdf', id=prediction.id) }}" class="btn btn-secondary" style="background: white; color: var(--primary-800) !important;">
-        📄 Download Certified PDF Report
+      <a href="{{ url_for('report.download_crop_pdf', id=prediction.id) }}" class="btn btn-primary">
+        📄 View Certified PDF Report
       </a>
       <a href="{{ url_for('report.view_crop_report', id=prediction.id) }}" class="btn btn-outline" style="border-color: white; color: white !important;">
         👁️ View Web Advisory
